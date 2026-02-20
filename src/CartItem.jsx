@@ -1,10 +1,10 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeItem, updateQuantity } from './CartSlice';
+import { removeItem, updateQuantity } from './CartSlice'; // Import Redux actions
 import './CartItem.css';
 
 const CartItem = ({ onContinueShopping }) => {
-	// Get cart items from Redux store
+	// Access Redux store to retrieve cart items
 	const cart = useSelector(state => state.cart.items);
 	const dispatch = useDispatch();
 
@@ -13,7 +13,7 @@ const CartItem = ({ onContinueShopping }) => {
 		return parseFloat(cost.replace('$', ''));
 	};
 
-	// Calculate total amount for all items in the cart
+	// Task 3 & 4: Calculate total amount for all items in the cart
 	const calculateTotalAmount = () => {
 		let total = 0;
 		cart.forEach((item) => {
@@ -23,29 +23,27 @@ const CartItem = ({ onContinueShopping }) => {
 		return total;
 	};
 
-	// Calculate subtotal for a specific item (cost * quantity)
+	// Task 3: Calculate subtotal for a specific item (cost * quantity)
 	const calculateTotalCost = (item) => {
 		const itemCost = parseCost(item.cost);
 		return itemCost * item.quantity;
 	};
 
-	// Handle incrementing item quantity by 1
+	// Task 4: Use the updateQuantity action to increase item quantity
 	const handleIncrement = (item) => {
 		dispatch(updateQuantity({ name: item.name, quantity: item.quantity + 1 }));
 	};
 
-	// Handle decrementing item quantity or removing if quantity reaches 0
+	// Task 4: Use the updateQuantity action to decrease item quantity or remove if 0
 	const handleDecrement = (item) => {
 		if (item.quantity > 1) {
-			// Decrease quantity by 1
 			dispatch(updateQuantity({ name: item.name, quantity: item.quantity - 1 }));
 		} else {
-			// Remove item from cart if quantity would drop to 0
-			dispatch(removeItem(item.name));
+			dispatch(removeItem(item.name)); // Remove item if quantity drops to 0
 		}
 	};
 
-	// Handle remove item from cart (delete functionality)
+	// Task 4: Use the removeItem action to delete an item completely from the cart
 	const handleRemove = (itemName) => {
 		dispatch(removeItem(itemName));
 	};
@@ -99,7 +97,7 @@ const CartItem = ({ onContinueShopping }) => {
 							{/* Item subtotal */}
 							<div className="cart-item-total">Subtotal: ${calculateTotalCost(item).toFixed(2)}</div>
 
-							{/* Delete button */}
+							{/* Delete button - Task 4: dispatch removeItem */}
 							<button
 								className="cart-item-delete"
 								onClick={() => handleRemove(item.name)}

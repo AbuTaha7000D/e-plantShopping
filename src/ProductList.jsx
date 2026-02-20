@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './ProductList.css';
 import CartItem from './CartItem';
-import { addItem } from './CartSlice'; // Import the addItem action from CartSlice
+import { addItem } from './CartSlice'; // Import addItem action from Redux slice
 
 function ProductList({ onHomeClick }) {
 	const [showCart, setShowCart] = useState(false); // Toggle cart visibility
@@ -10,10 +10,11 @@ function ProductList({ onHomeClick }) {
 	const [addedToCart, setAddedToCart] = useState({}); // Track which products have been added to cart
 
 	const dispatch = useDispatch();
-	const cartItems = useSelector(state => state.cart.items); // Get cart items from Redux store
+	// Access Redux store to retrieve cart items
+	const cartItems = useSelector(state => state.cart.items);
 
-	// Calculate total number of items in cart for display in navbar
-	const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
+	// Task 4: Access the Redux store to retrieve and display the total quantity of items
+	const totalItems = cartItems ? cartItems.reduce((total, item) => total + item.quantity, 0) : 0;
 
 	// Array of plant categories and their respective plants
 	const plantsArray = [
@@ -136,7 +137,7 @@ function ProductList({ onHomeClick }) {
 		}
 	];
 
-	// Handle adding a plant to the cart
+	// Task 4: Use the addItem action to add selected products to the cart
 	const handleAddToCart = (plant) => {
 		dispatch(addItem(plant)); // Dispatch action to add plant to Redux store
 		setAddedToCart((prevState) => ({
@@ -211,6 +212,7 @@ function ProductList({ onHomeClick }) {
 					<div>
 						<a href="#" onClick={(e) => handleCartClick(e)} style={styleA}>
 							<h1 className='cart'>
+								{/* Display total quantity of items dynamically from Redux store */}
 								<span className="cart_quantity_count">{totalItems}</span>
 								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" id="IconChangeColor" height="68" width="68">
 									<rect width="156" height="156" fill="none"></rect>
