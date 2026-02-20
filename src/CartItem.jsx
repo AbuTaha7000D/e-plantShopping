@@ -4,21 +4,25 @@ import { removeItem, updateQuantity } from './CartSlice';
 import './CartItem.css';
 
 const CartItem = ({ onContinueShopping }) => {
-	const cart = useSelector(state => state.cart.items);
+	const cart = useSelector(state => state.cart.items); // Get cart items from Redux store
 	const dispatch = useDispatch();
 
+	// Parse cost string (e.g., "$15") to a number for calculations
 	const parseCost = (cost) => {
 		return parseFloat(cost.replace('$', ''));
 	};
 
+	// Calculate total amount for all items in the cart
 	const calculateTotalAmount = () => {
 		return cart.reduce((total, item) => total + (parseCost(item.cost) * item.quantity), 0);
 	};
 
+	// Handle incrementing item quantity
 	const handleIncrement = (item) => {
 		dispatch(updateQuantity({ name: item.name, quantity: item.quantity + 1 }));
 	};
 
+	// Handle decrementing item quantity or removing if quantity reaches 0
 	const handleDecrement = (item) => {
 		if (item.quantity > 1) {
 			dispatch(updateQuantity({ name: item.name, quantity: item.quantity - 1 }));
@@ -27,8 +31,14 @@ const CartItem = ({ onContinueShopping }) => {
 		}
 	};
 
+	// Calculate subtotal for a specific item (cost * quantity)
 	const calculateTotalCost = (item) => {
 		return parseCost(item.cost) * item.quantity;
+	};
+
+	// Handle checkout button click (placeholder functionality)
+	const handleCheckoutShopping = (e) => {
+		alert('Functionality to be added for future reference');
 	};
 
 	return (
@@ -55,7 +65,7 @@ const CartItem = ({ onContinueShopping }) => {
 			<div className="continue_shopping_btn">
 				<button className="get-started-button" onClick={(e) => onContinueShopping(e)}>Continue Shopping</button>
 				<br />
-				<button className="get-started-button1" onClick={() => alert('Checkout Coming Soon')}>Checkout</button>
+				<button className="get-started-button1" onClick={handleCheckoutShopping}>Checkout</button>
 			</div>
 		</div>
 	);
